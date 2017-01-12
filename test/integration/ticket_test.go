@@ -45,10 +45,12 @@ func TestTicketCRUD(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, input.Status, updated.Status)
 
-	requested, err := client.ListRequestedTickets(*user.ID)
+	requested, err := client.ListUserTicketsRequested(*user.ID, nil)
 	assert.NoError(t, err)
 	assert.Len(t, requested, 1)
 	assert.Equal(t, created.ID, requested[0].ID)
+
+	// TODO: client.ListUserTicketsCCd, client.ListOrganizationTickets
 }
 
 func TestUpdateManyTickets(t *testing.T) {

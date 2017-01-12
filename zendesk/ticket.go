@@ -3,6 +3,8 @@ package zendesk
 import (
 	"fmt"
 	"time"
+
+	"github.com/google/go-querystring/query"
 )
 
 type Ticket struct {
@@ -66,9 +68,45 @@ func (c *client) UpdateManyTickets(tickets []Ticket) ([]Ticket, error) {
 	return out.Tickets, err
 }
 
-func (c *client) ListRequestedTickets(userID int64) ([]Ticket, error) {
+// ListTicketsOptions specifies the optional parameters for the list tickets methods.
+type ListTicketsOptions struct {
+	ListOptions
+
+	Include   string `url:"include"`    // Possible values are comment_count
+	SortBy    string `url:"sort_by"`    // Possible values are assignee, assignee.name, created_at, group, id, locale, requester, requester.name, status, subject, updated_at
+	SortOrder string `url:"sort_order"` // One of asc, desc. Defaults to asc
+}
+
+func (c *client) ListUserTicketsRequested(id int64, opts *ListTicketsOptions) ([]Ticket, error) {
+	params, err := query.Values(opts)
+	if err != nil {
+		return nil, err
+	}
+
 	out := new(APIPayload)
-	err := c.get(fmt.Sprintf("/api/v2/users/%d/tickets/requested.json", userID), out)
+	err = c.get(fmt.Sprintf("/api/v2/users/%d/tickets/requested.json?%s", id, params.Encode()), out)
+	return out.Tickets, err
+}
+
+func (c *client) ListUserTicketsCCd(id int64, opts *ListTicketsOptions) ([]Ticket, error) {
+	params, err := query.Values(opts)
+	if err != nil {
+		return nil, err
+	}
+
+	out := new(APIPayload)
+	err = c.get(fmt.Sprintf("/api/v2/users/%d/tickets/ccd.json?%s", id, params.Encode()), out)
+	return out.Tickets, err
+}
+
+func (c *client) ListOrganizationTickets(id int64, opts *ListTicketsOptions) ([]Ticket, error) {
+	params, err := query.Values(opts)
+	if err != nil {
+		return nil, err
+	}
+
+	out := new(APIPayload)
+	err = c.get(fmt.Sprintf("/api/v2/organizations/%d/tickets.json?%s", id, params.Encode()), out)
 	return out.Tickets, err
 }
 
