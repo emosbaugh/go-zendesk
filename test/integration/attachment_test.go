@@ -43,7 +43,7 @@ func TestAttachmentCRUD(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	comments, err := client.ListTicketComments(*ticket.ID)
+	comments, err := client.ListTicketComments(*ticket.ID, nil)
 	require.NoError(t, err)
 	require.Len(t, comments, 1)
 	require.NotNil(t, comments[0].Attachments)

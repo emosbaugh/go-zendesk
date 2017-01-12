@@ -22,7 +22,7 @@ func TestTicketCommentCRUD(t *testing.T) {
 	assert.NoError(t, err)
 
 	// assert that a newly created ticket has a comment
-	listed, err := client.ListTicketComments(*ticket.ID)
+	listed, err := client.ListTicketComments(*ticket.ID, nil)
 	assert.NoError(t, err)
 	assert.Len(t, listed, 1)
 
@@ -37,7 +37,7 @@ func TestTicketCommentCRUD(t *testing.T) {
 	assert.NoError(t, err)
 
 	// assert that we can list the newly created comment
-	listed, err = client.ListTicketComments(*ticket.ID)
+	listed, err = client.ListTicketComments(*ticket.ID, nil)
 	assert.NoError(t, err)
 	assert.Len(t, listed, 2)
 }

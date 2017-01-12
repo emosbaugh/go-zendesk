@@ -24,7 +24,7 @@ type Client interface {
 	ListUserTicketsRequested(int64, *ListTicketsOptions) ([]Ticket, error)
 	ListUserTicketsCCd(int64, *ListTicketsOptions) ([]Ticket, error)
 	ListOrganizationTickets(int64, *ListTicketsOptions) ([]Ticket, error)
-	ListTicketComments(int64) ([]TicketComment, error)
+	ListTicketComments(int64, *ListTicketCommentsOptions) ([]TicketComment, error)
 	ListTicketFields() ([]TicketField, error)
 	ListTicketIncidents(int64) ([]Ticket, error)
 	SearchUsers(string) ([]User, error)
